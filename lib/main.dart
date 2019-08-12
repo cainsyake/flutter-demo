@@ -121,6 +121,20 @@ class _CounterState extends State<Counter> {
   }
 }
 
+class CounterDisplay extends StatelessWidget {
+  CounterDisplay({this.onPress});
+
+  final VoidCallback onPress;
+  @override
+  Widget build(BuildContext context) {
+    return new RaisedButton(onPressed: onPress);
+  }
+}
+
+class CounterIncrementor extends StatelessWidget {
+
+}
+
 class MyCounter extends StatefulWidget {
   @override
   _MyCounterState createState() => new _MyCounterState();
