@@ -12,6 +12,30 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('登录'),
+      ),
+      body: Column(
+        children: <Widget>[
+          Center(
+            child: LoginForm(),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class LoginForm extends StatefulWidget {
+  @override
+  _LoginFormState createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   String userName;
@@ -36,53 +60,29 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('登录'),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _forSubmitted,
-        child: Text('提交'),
-      ),
-      body: Column(
-        children: <Widget>[
-          Center(
-            child: Form(
-                key: _formKey,
-                child: Column(
-                  children: <Widget>[
-                    TextFormField(
-                      decoration: InputDecoration(labelText: '请输入用户名'),
-                      onSaved: (val) {
-                        userName = val;
-                      },
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(labelText: '请输入密码'),
-                      obscureText: true,
-                      onSaved: (val) {
-                        password = val;
-                      },
-                    ),
-                  ],
-                )
+    return Form(
+        key: _formKey,
+        child: Column(
+          children: <Widget>[
+            TextFormField(
+              decoration: InputDecoration(labelText: '请输入用户名'),
+              onSaved: (val) {
+                userName = val;
+              },
             ),
-          )
-        ],
-      ),
+            TextFormField(
+              decoration: InputDecoration(labelText: '请输入密码'),
+              obscureText: true,
+              onSaved: (val) {
+                password = val;
+              },
+            ),
+            RaisedButton(
+              onPressed: _forSubmitted,
+              child: Text('submit'),
+            )
+          ],
+        )
     );
-  }
-}
-
-class LoginForm extends StatelessWidget {
-  LoginForm({this.userName, this.password});
-
-  final String userName;
-  final String password;
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return null;
   }
 }
