@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'router/page1.dart';
 import 'login/index.dart';
+import 'img/index.dart';
 
 class MyApp extends StatelessWidget {
   @override
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder> {
         '/router/page1': (_) => PageOne(),
         '/login': (_) => Login(),
+        '/img': (_) => SelectImage(),
       },
     );
   }
@@ -40,6 +42,8 @@ class _HomePageState extends State<HomePage> {
     list.addAll([
       {'title': '路由页1', 'type': 'router', 'router': '/router/page1'},
       {'title': '登录页', 'type': 'router', 'router': '/login'},
+      {'title': '图片', 'type': 'router', 'router': '/img'},
+
     ]);
   }
 
