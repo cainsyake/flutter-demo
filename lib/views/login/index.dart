@@ -5,6 +5,7 @@
  */
 
 import 'package:flutter/material.dart';
+import '../user/index.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -47,7 +48,10 @@ class _LoginFormState extends State<LoginForm> {
     print('username:$userName');
     print('password:$password');
 
-    Navigator.of(context).pushNamed('/');
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+      return UserIndex(userName: userName,);
+    }));
+//    Navigator.of(context).pushNamed('/');4
   }
 
   @override
@@ -79,7 +83,10 @@ class _LoginFormState extends State<LoginForm> {
             ),
             RaisedButton(
               onPressed: _forSubmitted,
-              child: Text('submit'),
+              textColor: Colors.white,
+              color: Colors.blue,
+              padding: const EdgeInsets.all(10.0),
+              child: Text('登录'),
             )
           ],
         )
