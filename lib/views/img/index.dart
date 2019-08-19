@@ -2,23 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-//class Img extends StatelessWidget {
-//  @override
-//  Widget build(BuildContext context) {
-//    // TODO: implement build
-//    return Scaffold(
-//      appBar: AppBar(
-//        title: Text('图片处理'),
-//      ),
-//      body: Column(
-//        children: <Widget>[
-//          SelectImage()
-//        ],
-//      ),
-//    );
-//  }
-//}
-
 class SelectImage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -29,12 +12,14 @@ class SelectImage extends StatefulWidget {
 class _SelectImageState extends State<SelectImage> {
   List imgList=new List<File>();
   Future getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      imgList.add(image);
-    });
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    if (image != null) {
+      setState(() {
+        imgList.add(image);
+      });
+    }
   }
-  dynamic  getBody() {
+  dynamic getBody() {
     if (showLoadingDialog()) {
       return getProgressDialog();
     } else {
@@ -51,7 +36,14 @@ class _SelectImageState extends State<SelectImage> {
   }
 
   Center getProgressDialog() {
-    return new Center(child: new CircularProgressIndicator());
+    return Center(
+        child: Column(
+          children: <Widget>[
+            Text('暂无数据'),
+            CircularProgressIndicator()
+          ],
+        )
+    );
   }
 
   ListView getListView()=>new ListView.builder(
