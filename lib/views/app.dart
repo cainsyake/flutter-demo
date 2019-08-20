@@ -3,6 +3,7 @@ import 'router/page1.dart';
 import 'login/index.dart';
 import 'img/index.dart';
 import 'store/index.dart';
+import 'webview/index.dart';
 
 class MyApp extends StatelessWidget {
   @override
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
         '/login': (_) => Login(),
         '/img': (_) => SelectImage(),
         '/store': (_) => LocalStore(),
+        '/webview': (_) => WebViewPage()
       },
     );
   }
@@ -46,6 +48,7 @@ class _HomePageState extends State<HomePage> {
       {'title': '登录页', 'type': 'router', 'router': '/login'},
       {'title': '图片', 'type': 'router', 'router': '/img'},
       {'title': '本地存储', 'type': 'router', 'router': '/store'},
+      {'title': 'webview', 'type': 'router', 'router': '/webview'},
     ]);
   }
 
