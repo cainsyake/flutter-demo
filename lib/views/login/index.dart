@@ -6,6 +6,8 @@
 
 import 'package:flutter/material.dart';
 import '../user/index.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
 
 class Login extends StatefulWidget {
   @override
@@ -45,13 +47,33 @@ class _LoginFormState extends State<LoginForm> {
   void _forSubmitted() {
     var _form = _formKey.currentState;
     _form.save();
+
+    _sendLoginRequest();
+
+
+  }
+
+  void _sendLoginRequest() async {
     print('username:$userName');
     print('password:$password');
-
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-      return UserIndex(userName: userName,);
-    }));
-//    Navigator.of(context).pushNamed('/');4
+    String url = 'https://cms.frps.cainsyake.com/api/public/login';
+    var data = {
+      'username': userName,
+      'password': password
+    };
+    var response = await http.post(url, body: data);
+    if (response.statusCode == 200) {
+      var res = convert.jsonDecode(response.body);
+      if (res['state'] == 0) {
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+          return UserIndex(userName: userName,);
+        }));
+      } else {
+        SnackBar snackBar = SnackBar(content: Text('用户名或密码错误，登录失败'));
+        Scaffold.of(context).showSnackBar(snackBar);
+        print('登录失败');
+      }
+    }
   }
 
   @override
@@ -70,6 +92,7 @@ class _LoginFormState extends State<LoginForm> {
           children: <Widget>[
             TextFormField(
               decoration: InputDecoration(labelText: '请输入用户名'),
+              keyboardType: TextInputType.number,
               onSaved: (val) {
                 userName = val;
               },
