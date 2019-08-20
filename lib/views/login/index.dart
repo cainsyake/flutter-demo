@@ -65,7 +65,11 @@ class _LoginFormState extends State<LoginForm> {
     if (response.statusCode == 200) {
       var res = convert.jsonDecode(response.body);
       if (res['state'] == 0) {
-        Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+        /**
+         * 有下面的这种场景，我们进入到登录页面后，要跳转到用户页面，不过点击返回按钮，并不想回退到登录页面。也就是想将用户中心的Widget插入栈顶的同时，将登录页也从路由栈移除。
+         * 这个时候，我们就要用到pushReplacementNamed()或者popAndPushNamed(),pushReplacement()都可以实现这个目的。
+         */
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
           return UserIndex(userName: userName,);
         }));
       } else {
