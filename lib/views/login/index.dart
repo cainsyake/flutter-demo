@@ -15,6 +15,17 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  // 登录成功回调函数
+  void loginSuccess(String userName) async {
+    /**
+     * 登录成功后会跳转到用户页面，如果在用户页面点击返回按钮，并不需要回退到登录页面。
+     * 也就是想将用户中心的Widget插入栈顶的同时，将登录页也从路由栈移除。
+     * 这个时候，我们就要用到pushReplacementNamed()或者popAndPushNamed(),pushReplacement()都可以实现这个目的。
+     */
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
+      return UserIndex(userName: userName,);
+    }));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +36,7 @@ class _LoginState extends State<Login> {
       body: Column(
         children: <Widget>[
           Center(
-            child: LoginForm(),
+            child: LoginForm(loginSuccess: loginSuccess),
           )
         ],
       ),
@@ -34,6 +45,10 @@ class _LoginState extends State<Login> {
 }
 
 class LoginForm extends StatefulWidget {
+  LoginForm({Key key, this.loginSuccess}) : super(key: key);
+  // 登录成功的回调
+  final loginSuccess;
+
   @override
   _LoginFormState createState() => _LoginFormState();
 }
@@ -48,14 +63,13 @@ class _LoginFormState extends State<LoginForm> {
     var _form = _formKey.currentState;
     _form.save();
 
-    _sendLoginRequest();
-
-
+    // 校验
+    _loginValidate();
   }
 
-  void _sendLoginRequest() async {
+  // 发送登录校验请求
+  void _loginValidate() async {
     print('username:$userName');
-    print('password:$password');
     String url = 'https://cms.frps.cainsyake.com/api/public/login';
     var data = {
       'username': userName,
@@ -65,13 +79,8 @@ class _LoginFormState extends State<LoginForm> {
     if (response.statusCode == 200) {
       var res = convert.jsonDecode(response.body);
       if (res['state'] == 0) {
-        /**
-         * 有下面的这种场景，我们进入到登录页面后，要跳转到用户页面，不过点击返回按钮，并不想回退到登录页面。也就是想将用户中心的Widget插入栈顶的同时，将登录页也从路由栈移除。
-         * 这个时候，我们就要用到pushReplacementNamed()或者popAndPushNamed(),pushReplacement()都可以实现这个目的。
-         */
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
-          return UserIndex(userName: userName,);
-        }));
+        // 调用登录成功函数
+        widget.loginSuccess(userName);
       } else {
         SnackBar snackBar = SnackBar(content: Text('用户名或密码错误，登录失败'));
         Scaffold.of(context).showSnackBar(snackBar);
