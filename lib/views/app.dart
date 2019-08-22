@@ -39,19 +39,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Map<String, String>> list = <Map<String, String>>[];
+  List list = [];
 
   @override
   void initState() {
     super.initState();
 
     list.addAll([
-      {'title': '路由页1', 'type': 'router', 'router': '/router/page1'},
-      {'title': '登录页', 'type': 'router', 'router': '/login'},
-      {'title': '图片', 'type': 'router', 'router': '/img'},
-      {'title': '本地存储', 'type': 'router', 'router': '/store'},
-      {'title': 'webview', 'type': 'router', 'router': '/webview'},
-      {'title': '本地校验', 'type': 'router', 'router': '/localauth'},
+      {'title': '路由页1', 'icon': Icons.turned_in, 'type': 'router', 'router': '/router/page1'},
+      {'title': '登录页', 'icon': Icons.verified_user, 'type': 'router', 'router': '/login'},
+      {'title': '图片', 'icon': Icons.collections, 'type': 'router', 'router': '/img'},
+      {'title': '本地存储', 'icon': Icons.wb_cloudy, 'type': 'router', 'router': '/store'},
+      {'title': 'webview', 'icon': Icons.web, 'type': 'router', 'router': '/webview'},
+      {'title': '本地校验', 'icon': Icons.fingerprint, 'type': 'router', 'router': '/localauth'},
     ]);
   }
 
@@ -61,45 +61,67 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(widget.title != null ? widget.title : '默认首页'),
       ),
-      body: ListView.builder(
-          physics: const AlwaysScrollableScrollPhysics(),
-          itemCount: this.list.length,
-          itemBuilder: (_, int index) => _createItem(context, list[index]),
-      ),
-    );
-  }
-
-  _createItem(BuildContext context, Map<String, String> map) {
-    return new GestureDetector(
-      onTap: () {
-//        if (map['type'] == 'pullToRefresh') {
-//          // 下拉刷新
-//          BRouter.pushRefreshDetail(context);
-//        }
-        if (map['type'] == 'router') {
-          print(map['router']);
-          Navigator.of(context).pushNamed(map['router']);
-        }
-        else if (map['type'] == 'ts') {
-          Navigator.of(context).pushNamed('/text/style');
-        }
-        else {
-          Navigator.of(context).pushNamed(map['router']);
-        }
-      },
-      child: new Column(
+      body: Column(
         children: <Widget>[
-          new Container(
-            height: 24.0,
-            margin: EdgeInsets.all(10.0),
-            alignment: Alignment.center,
-            child: new Text(map['title']),
+          Center(
+            child: Container(
+              padding: EdgeInsets.fromLTRB(0, 10, 0, 20),
+              child: Text(
+                'Flutter 示范应用',
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontSize: 30.0,
+                ),
+              ),
+            ),
           ),
-          Divider(
-            height: 0.5,
+          Center(
+            child: _getPageList(),
           )
         ],
-      ),
+      )
+    );
+  }
+  
+  Widget _getPageList() {
+    List<Widget> pages = <Widget>[];
+    if (this.list.length > 0) {
+      this.list.forEach((item) {
+        pages.add(Container(
+          width: 100.0,
+          height: 60.0,
+          margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+          child: GestureDetector(
+            child: Card(
+              child: Column(
+                children: <Widget>[
+                  Icon(
+                    item['icon'],
+                    color: Colors.blue,
+                    size: 30.0,
+                  ),
+                  Text(item['title']),
+                ],
+              ),
+            ),
+            onTap: () {
+              if (item['type'] == 'router') {
+                Navigator.of(context).pushNamed(item['router']);
+              }
+              else if (item['type'] == 'ts') {
+                Navigator.of(context).pushNamed('/text/style');
+              }
+              else {
+                Navigator.of(context).pushNamed(item['router']);
+              }
+            },
+          ),
+        ));
+      });
+    }
+    
+    return Wrap(
+      children: pages,
     );
   }
 }
